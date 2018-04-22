@@ -12,7 +12,7 @@ public class Character : MonoBehaviour
     [SerializeField] Animator anim;
     [SerializeField] AudioClip[] clips;
     [SerializeField] GameObject bulletPrefab;
-    public bool isGround, isLadder, isJump, isJumpSuper, isJumpCharging, isSuperCharging, isRight, isFire, takeDMG;
+    public bool isGround, isLadder, isJump, isJumpSuper, isJumpCharging, isSuperCharging, isRight, isFire, takeDMG, isPlay;
     float jumpTimer, axisX, axisY;
     public int health, ammo;
     Rigidbody2D rb;
@@ -35,6 +35,7 @@ public class Character : MonoBehaviour
         isSuperCharging = false;
         isJumpCharging = false;
         takeDMG = true;
+        isPlay = true;
 
         ammo = 25;
         health = 3;
@@ -188,6 +189,16 @@ public class Character : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            takeDMG = false;
+            health--;
+            StartCoroutine("InvulnerabilityCheck");
+        }
+    }
+
     void SetLadder(bool b)
     {
         isLadder = b;
@@ -201,7 +212,7 @@ public class Character : MonoBehaviour
             ammo--;
             src.PlayOneShot(clips[3]);
             GameObject bulletInst = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
-            Destroy(bulletInst, 2);
+            Destroy(bulletInst, 1);
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -216,7 +227,11 @@ public class Character : MonoBehaviour
     {
         if (health == 0)
         {
-            src.PlayOneShot(clips[2]);
+            if (isPlay)
+            {
+                src.PlayOneShot(clips[0]);
+                isPlay = false;
+            }
             anim.SetBool("dead", true);
             src.Stop();
         }

@@ -6,19 +6,27 @@ using UnityEngine.UI;
 public class GameUI : MonoBehaviour
 {
     [SerializeField] GameObject hp1, hp2, hp3;
-    [SerializeField] Text bullets;
+    [SerializeField] Text bullets, bossHP;
+    [SerializeField] GameObject bossTXT;
     Character player;
-
+    BossEnemy boss;
     void Start()
     {
         player = Character.instance;
+        boss = BossEnemy.instance;
+        bossTXT.gameObject.SetActive(false);
     }
 
     void Update ()
     {
         HealthCheck();
         bullets.text = player.ammo.ToString();
-	}
+        if (boss.isActive)
+        {
+            bossTXT.gameObject.SetActive(true);
+            bossHP.text = boss.health.ToString();
+        }
+    }
 
     void HealthCheck()
     {

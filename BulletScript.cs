@@ -35,7 +35,7 @@ public class BulletScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        anim.SetBool("explode", true);
-        Destroy(gameObject, 1);
+        //anim.SetBool("explode", true);
+        Destroy(gameObject, 1f);
     }
 }
