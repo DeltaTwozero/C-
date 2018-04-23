@@ -23,6 +23,8 @@ public class Character : MonoBehaviour
     {
         instance = this;
         anim.SetBool("dead", false);
+        ammo = 25;
+        health = 4;
     }
 
     void Start()
@@ -37,8 +39,7 @@ public class Character : MonoBehaviour
         takeDMG = true;
         isPlay = true;
 
-        ammo = 25;
-        health = 3;
+
     }
 
     void Update()
@@ -168,7 +169,7 @@ public class Character : MonoBehaviour
 
         if (col.gameObject.tag == "Medkit")
         {
-            health = 3;
+            health = 4;
             src.PlayOneShot(clips[5]);
             Destroy(col.gameObject);
         }
@@ -191,10 +192,46 @@ public class Character : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.tag == "Enemy" && takeDMG)
         {
+            if(health >= 1)
+                src.PlayOneShot(clips[7]);
+
             takeDMG = false;
             health--;
+            StartCoroutine("InvulnerabilityCheck");
+        }
+
+        if (col.gameObject.tag == "EnemyBLT" && takeDMG)
+        {
+            if (health >= 1)
+                src.PlayOneShot(clips[7]);
+
+            takeDMG = false;
+            health = health - 2;
+            StartCoroutine("InvulnerabilityCheck");
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy" && takeDMG)
+        {
+            if(health >= 1)
+            src.PlayOneShot(clips[7]);
+
+            takeDMG = false;
+            health--;
+            StartCoroutine("InvulnerabilityCheck");
+        }
+
+        if (col.gameObject.tag == "EnemyBLT" && takeDMG)
+        {
+            if (health >= 1)
+                src.PlayOneShot(clips[7]);
+
+            takeDMG = false;
+            health = health - 2;
             StartCoroutine("InvulnerabilityCheck");
         }
     }
@@ -212,7 +249,6 @@ public class Character : MonoBehaviour
             ammo--;
             src.PlayOneShot(clips[3]);
             GameObject bulletInst = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
-            Destroy(bulletInst, 1);
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -229,11 +265,16 @@ public class Character : MonoBehaviour
         {
             if (isPlay)
             {
-                src.PlayOneShot(clips[0]);
+                //print("test");
+                src.PlayOneShot(clips[2]);
                 isPlay = false;
             }
             anim.SetBool("dead", true);
-            src.Stop();
+        }
+
+        if (this.transform.position.y <= -30)
+        {
+            health = 0;
         }
     }
 

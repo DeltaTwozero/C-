@@ -8,7 +8,6 @@ public class BulletScript : MonoBehaviour
     Animator anim;
     bool goRight;
 
-    Transform bullet;
     float speed = 10;
 
     void Start()
@@ -36,6 +35,6 @@ public class BulletScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         //anim.SetBool("explode", true);
-        Destroy(gameObject, 1f);
+        Destroy(gameObject);
     }
 }

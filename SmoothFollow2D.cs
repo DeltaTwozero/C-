@@ -4,8 +4,8 @@ using UnityEngine;
 public class SmoothFollow2D : MonoBehaviour
 {
     [SerializeField] Transform Target;
-    [SerializeField] float minX;
-    [SerializeField] float maxX;
+    [SerializeField] float minX, minY;
+    [SerializeField] float maxX, maxY;
 	// How much damping occurs when the target moves.
 	[SerializeField] float MovementDamping = 1.0f;
 
@@ -33,7 +33,9 @@ public class SmoothFollow2D : MonoBehaviour
         //currentPosition.y = cameraY;
         if (currentPosition.x < minX) currentPosition.x = minX;
         if (currentPosition.x > maxX) currentPosition.x = maxX;
-		// Update the current position with the smoothed position towards the target object.
-		this.transform.position = currentPosition;
+        if (currentPosition.y < minY) currentPosition.y = minY;
+        if (currentPosition.y > maxY) currentPosition.y = maxY;
+        // Update the current position with the smoothed position towards the target object.
+        this.transform.position = currentPosition;
 	}
 }
